@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'curb'
+require 'eac_rest/request'
 require 'eac_ruby_utils/core_ext'
 
 module EacRest

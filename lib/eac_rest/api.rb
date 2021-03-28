@@ -19,7 +19,11 @@ module EacRest
     end
 
     def request_json(service_url_suffix, headers = {}, &body_data_proc)
-      request(service_url_suffix, headers.merge('Accept' => 'application/json'), &body_data_proc)
+      request(service_url_suffix, headers.merge('Accept' => 'application/json')) do |body_data|
+        r = ::JSON.parse(body_data)
+        r = body_data_proc.call(r) if body_data_proc
+        r
+      end
     end
 
     def build_service_url(suffix)

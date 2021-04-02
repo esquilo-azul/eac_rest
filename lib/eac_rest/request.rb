@@ -6,7 +6,7 @@ require 'ostruct'
 
 module EacRest
   class Request
-    MODIFIERS = %w[auth].freeze
+    MODIFIERS = %w[auth headers].freeze
     common_constructor :url, :body_data_proc, default: [nil]
 
     def autenticate(username, password)
@@ -28,7 +28,6 @@ module EacRest
     def build_curl
       r = ::Curl::Easy.new(url)
       MODIFIERS.each { |suffix| send("build_curl_#{suffix}", r) }
-      r.headers.merge!(headers)
       r
     end
 
@@ -38,6 +37,10 @@ module EacRest
         curl.username = a.username
         curl.password = a.password
       end
+    end
+
+    def build_curl_headers(curl)
+      curl.headers.merge!(headers)
     end
 
     def headers

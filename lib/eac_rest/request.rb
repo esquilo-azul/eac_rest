@@ -6,7 +6,7 @@ require 'ostruct'
 
 module EacRest
   class Request
-    COMMON_MODIFIERS = %w[auth].freeze
+    COMMON_MODIFIERS = %w[auth body_data].freeze
     HASH_MODIFIERS = %w[header].freeze
     MODIFIERS = COMMON_MODIFIERS + HASH_MODIFIERS.map(&:pluralize)
 
@@ -44,8 +44,20 @@ module EacRest
       end
     end
 
+    def build_curl_body_data(curl)
+      www_form_body_data_encoded.if_present { |v| curl.post_body = v }
+    end
+
     def build_curl_headers(curl)
       curl.headers.merge!(headers)
+    end
+
+    def www_form_body_data_encoded
+      body_data.if_present do |v|
+        v = v.map { |k, vv| [k, vv] } if v.is_a?(::Hash)
+        v = URI.encode_www_form(v) if v.is_a?(::Array)
+        v.to_s
+      end
     end
   end
 end

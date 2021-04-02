@@ -6,15 +6,22 @@ require 'ostruct'
 
 module EacRest
   class Request
-    MODIFIERS = %w[auth headers].freeze
+    COMMON_MODIFIERS = %w[auth].freeze
+    HASH_MODIFIERS = %w[header].freeze
+    MODIFIERS = COMMON_MODIFIERS + HASH_MODIFIERS.map(&:pluralize)
+
+    enable_immutable
+    immutable_accessor(*COMMON_MODIFIERS, type: :common)
+    immutable_accessor(*HASH_MODIFIERS, type: :hash)
+
     common_constructor :url, :body_data_proc, default: [nil]
 
     def autenticate(username, password)
-      self.auth = ::OpenStruct.new(username: username, password: password)
+      auth(::OpenStruct.new(username: username, password: password))
     end
 
-    def header(name, value)
-      headers[name.to_s] = value
+    def immutable_constructor_args
+      [url, body_data_proc]
     end
 
     def response
@@ -22,8 +29,6 @@ module EacRest
     end
 
     private
-
-    attr_accessor :auth
 
     def build_curl
       r = ::Curl::Easy.new(url)
@@ -41,10 +46,6 @@ module EacRest
 
     def build_curl_headers(curl)
       curl.headers.merge!(headers)
-    end
-
-    def headers
-      @headers ||= {}
     end
   end
 end

@@ -6,13 +6,16 @@ require 'ostruct'
 
 module EacRest
   class Request
-    COMMON_MODIFIERS = %w[auth body_data].freeze
+    COMMON_MODIFIERS = %w[auth body_data verb].freeze
     HASH_MODIFIERS = %w[header].freeze
     MODIFIERS = COMMON_MODIFIERS + HASH_MODIFIERS.map(&:pluralize)
 
     enable_immutable
     immutable_accessor(*COMMON_MODIFIERS, type: :common)
     immutable_accessor(*HASH_MODIFIERS, type: :hash)
+
+    enable_listable
+    lists.add_symbol :verb, :get, :delete, :options, :post, :put
 
     common_constructor :url, :body_data_proc, default: [nil]
 
@@ -50,6 +53,13 @@ module EacRest
 
     def build_curl_headers(curl)
       curl.headers.merge!(headers)
+    end
+
+    def build_curl_verb(curl)
+      curl.set(
+        :customrequest,
+        verb.if_present(VERB_GET) { |v| self.class.lists.verb.value_validate!(v) }.to_s.upcase
+      )
     end
 
     def www_form_body_data_encoded

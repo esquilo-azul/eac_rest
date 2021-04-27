@@ -30,7 +30,8 @@ module EacRest
       s = ::Addressable::URI.parse(suffix)
       r = ::Addressable::URI.parse(root_url)
       r.path += s.path
-      r.query_values = r.query_values.if_present({}).merge(s.query_values.if_present({}))
+      r.query_values = r.query_values(::Array).if_present([]) +
+                       s.query_values(::Array).if_present([])
       r.to_s
     end
   end

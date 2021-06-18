@@ -13,8 +13,8 @@ module EacRest
     def request(service_url_suffix, headers = {}, &body_data_proc)
       r = ::EacRest::Request.new(build_service_url(service_url_suffix),
                                  body_data_proc)
-      headers.each { |name, value| r.header(name, value) }
-      r.autenticate(username, password) if username.present?
+      headers.each { |name, value| r = r.header(name, value) }
+      r = r.autenticate(username, password) if username.present?
       r
     end
 

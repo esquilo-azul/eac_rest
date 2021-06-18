@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'curb'
 require 'eac_rest/response'
 require 'eac_ruby_utils/core_ext'
 require 'ostruct'

@@ -28,12 +28,17 @@ module EacRest
 
     # @return [Addressable::URI]
     def build_service_url(suffix)
-      s = ::Addressable::URI.parse(suffix)
+      s = build_service_url_suffix(suffix)
       r = ::Addressable::URI.parse(root_url)
       r.path += s.path
       r.query_values = r.query_values(::Array).if_present([]) +
                        s.query_values(::Array).if_present([])
       r
+    end
+
+    # @return [Addressable::URI]
+    def build_service_url_suffix(suffix)
+      ::Addressable::URI.parse(suffix)
     end
   end
 end

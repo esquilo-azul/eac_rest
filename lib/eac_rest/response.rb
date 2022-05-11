@@ -10,6 +10,14 @@ module EacRest
       [m[1].strip, m[2].strip]
     end
 
+    # https://www.w3.org/wiki/LinkHeader
+    LINKS_HEADER_NAME = 'Link'
+
+    # https://www.w3.org/wiki/LinkHeader
+    LINK_PARSER = /\A\<(.+)\>\s*;\s*rel\s*=\s*\"(.*)\"\z/.to_parser do |m|
+      [m[2], m[1]]
+    end
+
     common_constructor :curl, :body_data_proc
 
     def body_data
@@ -43,6 +51,12 @@ module EacRest
       performed_curl.header_str.each_line.map(&:strip)[1..-1].reject(&:blank?)
                     .map { |header_line| HEADER_LINE_PARSER.parse!(header_line) }
                     .to_h
+    end
+
+    def links
+      header(LINKS_HEADER_NAME).if_present({}) do |v|
+        v.split(',').map { |w| LINK_PARSER.parse!(w.strip) }.to_h
+      end
     end
 
     def raise_unless_200

@@ -28,6 +28,9 @@ module EacRest
 
     # @return [Addressable::URI]
     def build_service_url(suffix)
+      r = ::Addressable::URI.parse(suffix)
+      return r if r.scheme.present?
+
       s = build_service_url_suffix(suffix)
       r = ::Addressable::URI.parse(root_url)
       r.path += s.path

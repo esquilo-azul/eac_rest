@@ -53,6 +53,10 @@ module EacRest
                     .to_h
     end
 
+    def link(rel)
+      hash_search(links, rel)
+    end
+
     def links
       header(LINKS_HEADER_NAME).if_present({}) do |v|
         v.split(',').map { |w| LINK_PARSER.parse!(w.strip) }.to_h

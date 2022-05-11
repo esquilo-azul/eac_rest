@@ -35,6 +35,10 @@ module EacRest
       body_str
     end
 
+    def header(name)
+      hash_search(headers, name)
+    end
+
     def headers
       performed_curl.header_str.each_line.map(&:strip)[1..-1].reject(&:blank?)
                     .map { |header_line| HEADER_LINE_PARSER.parse!(header_line) }
@@ -65,6 +69,14 @@ module EacRest
 
     def body_data_from_application_xml
       Hash.from_xml(body_str)
+    end
+
+    def hash_search(hash, key)
+      key = key.to_s.downcase
+      hash.each do |k, v|
+        return v if k.to_s.downcase == key
+      end
+      nil
     end
 
     def perform

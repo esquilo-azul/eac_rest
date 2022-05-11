@@ -6,6 +6,10 @@ require 'json'
 
 module EacRest
   class Response < ::StandardError
+    HEADER_LINE_PARSER = /\A([^:]+):(.*)\z/.to_parser do |m|
+      [m[1].strip, m[2].strip]
+    end
+
     common_constructor :curl, :body_data_proc
 
     def body_data
@@ -23,12 +27,18 @@ module EacRest
       body_data
     end
 
-    delegate :body_str, :headers, to: :performed_curl
+    delegate :body_str, to: :performed_curl
 
     def body_str_or_raise
       raise_unless_200
 
       body_str
+    end
+
+    def headers
+      performed_curl.header_str.each_line.map(&:strip)[1..-1].reject(&:blank?)
+                    .map { |header_line| HEADER_LINE_PARSER.parse!(header_line) }
+                    .to_h
     end
 
     def raise_unless_200

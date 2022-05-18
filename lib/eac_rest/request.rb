@@ -7,11 +7,13 @@ require 'ostruct'
 
 module EacRest
   class Request
+    BOOLEAN_MODIFIERS = %w[ssl_verify ssl_verify_peer ssl_verify_host].freeze
     COMMON_MODIFIERS = %w[auth body_data verb].freeze
     HASH_MODIFIERS = %w[header].freeze
-    MODIFIERS = COMMON_MODIFIERS + HASH_MODIFIERS.map(&:pluralize)
+    MODIFIERS = COMMON_MODIFIERS + BOOLEAN_MODIFIERS + HASH_MODIFIERS.map(&:pluralize)
 
     enable_immutable
+    immutable_accessor(*BOOLEAN_MODIFIERS, type: :boolean)
     immutable_accessor(*COMMON_MODIFIERS, type: :common)
     immutable_accessor(*HASH_MODIFIERS, type: :hash)
 
@@ -54,6 +56,25 @@ module EacRest
 
     def build_curl_headers(curl)
       curl.headers.merge!(headers)
+    end
+
+    def build_curl_ssl_verify(curl)
+      return if ssl_verify?.nil?
+
+      curl.ssl_verify_host = ssl_verify?
+      curl.ssl_verify_peer = ssl_verify?
+    end
+
+    def build_curl_ssl_verify_peer(curl)
+      return if ssl_verify_peer?.nil?
+
+      curl.ssl_verify_peer = ssl_verify_peer?
+    end
+
+    def build_curl_ssl_verify_host(curl)
+      return if ssl_verify_host?.nil?
+
+      curl.ssl_verify_peer = ssl_verify_host?
     end
 
     def build_curl_verb(curl)

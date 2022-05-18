@@ -8,11 +8,14 @@ module EacRest
   #   * self.issue_get_url_suffix(provider_issue_id)
   class Api
     require_sub __FILE__, include_modules: true
-    common_constructor :root_url, :username, :password, default: [nil, nil]
+    attr_accessor :ssl_verify
+    common_constructor :root_url, :username, :password, default: [nil, nil] do
+      self.ssl_verify = true
+    end
 
     def request(service_url_suffix, headers = {}, &body_data_proc)
       r = ::EacRest::Request.new(build_service_url(service_url_suffix),
-                                 body_data_proc)
+                                 body_data_proc).ssl_verify(ssl_verify)
       headers.each { |name, value| r = r.header(name, value) }
       r = r.autenticate(username, password) if username.present?
       r

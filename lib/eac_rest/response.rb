@@ -49,8 +49,8 @@ module EacRest
 
     def headers
       performed_curl.header_str.each_line.map(&:strip)[1..-1].reject(&:blank?)
-                    .map { |header_line| HEADER_LINE_PARSER.parse!(header_line) }
-                    .to_h
+        .map { |header_line| HEADER_LINE_PARSER.parse!(header_line) }
+        .to_h
     end
 
     def link(rel)

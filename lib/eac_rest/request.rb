@@ -33,6 +33,11 @@ module EacRest
       ::EacRest::Response.new(build_curl, body_data_proc)
     end
 
+    # @return [Symbol]
+    def sanitized_verb
+      verb.if_present(VERB_GET) { |v| self.class.lists.verb.value_validate!(v) }
+    end
+
     private
 
     def build_curl
@@ -65,10 +70,7 @@ module EacRest
     end
 
     def build_curl_verb(curl)
-      curl.set(
-        :customrequest,
-        verb.if_present(VERB_GET) { |v| self.class.lists.verb.value_validate!(v) }.to_s.upcase
-      )
+      curl.set(:customrequest, sanitized_verb.to_s.upcase)
     end
 
     def sanitized_body_data

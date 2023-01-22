@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'curb', '>= 0.9', '<= 2'
   s.add_dependency 'eac_ruby_utils', '~> 0.112'
 
+  s.add_development_dependency 'aranha-parsers', '~> 0.15'
   s.add_development_dependency 'eac_docker', '~> 0.5'
   s.add_development_dependency 'eac_ruby_gem_support', '~> 0.5.1'
 end

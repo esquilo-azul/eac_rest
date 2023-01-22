@@ -19,7 +19,8 @@ module EacRest
       [m[2], m[1]]
     end
 
-    common_constructor :curl, :body_data_proc
+    common_constructor :request
+    delegate :body_data_proc, to: :request
 
     def body_data
       r = performed_curl.headers['Accept'].if_present(body_str) do |v|
@@ -98,18 +99,14 @@ module EacRest
       nil
     end
 
-    def perform
-      @perform ||= begin
-        curl.perform || raise("CURL perform failed for #{url}")
-        true
-                   rescue ::Curl::Err::CurlError
-                     raise ::EacRest::Error
-      end
-    end
-
     def performed_curl
-      perform
-      curl
+      @performed_curl ||= begin
+        r = request.build_curl
+        r.perform || raise("CURL perform failed for #{url}")
+        r
+                          rescue ::Curl::Err::CurlError
+                            raise ::EacRest::Error
+      end
     end
   end
 end

@@ -25,12 +25,18 @@ module EacRest
       auth(::Struct.new(:username, :password).new(username, password))
     end
 
+    def build_curl
+      r = ::Curl::Easy.new(url)
+      MODIFIERS.each { |suffix| send("build_curl_#{suffix}", r) }
+      r
+    end
+
     def immutable_constructor_args
       [url, body_data_proc]
     end
 
     def response
-      ::EacRest::Response.new(build_curl, body_data_proc)
+      ::EacRest::Response.new(self)
     end
 
     # @return [Symbol]
@@ -39,12 +45,6 @@ module EacRest
     end
 
     private
-
-    def build_curl
-      r = ::Curl::Easy.new(url)
-      MODIFIERS.each { |suffix| send("build_curl_#{suffix}", r) }
-      r
-    end
 
     def build_curl_auth(curl)
       auth.if_present do |a|

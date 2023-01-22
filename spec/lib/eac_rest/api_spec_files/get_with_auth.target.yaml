@@ -1,0 +1,17 @@
+---
+path: "/path/to/service"
+headers:
+  authorization: Basic dGhlX3VzZXI6dGhlX3NlY3JldA==
+  accept: application/json
+method: GET
+body: ''
+fresh: false
+ips: []
+protocol: http
+query:
+  field1: value1
+  field2: value2
+subdomains: []
+xhr: false
+os: {}
+connection: {}

@@ -1,0 +1,14 @@
+---
+path: "/"
+headers:
+  accept: "*/*"
+method: GET
+body: ''
+fresh: false
+ips: []
+protocol: http
+query: {}
+subdomains: []
+xhr: false
+os: {}
+connection: {}

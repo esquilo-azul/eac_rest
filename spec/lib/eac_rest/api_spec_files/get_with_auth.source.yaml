@@ -1,0 +1,8 @@
+---
+url_suffix: '/path/to/service?field1=value1&field2=value2'
+auth:
+  username: the_user
+  password: the_secret
+verb: :get
+headers:
+  Accept: application/json

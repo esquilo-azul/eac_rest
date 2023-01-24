@@ -1,8 +1,10 @@
 ---
 path: "/path/to/service"
 headers:
-  authorization: Basic dGhlX3VzZXI6dGhlX3NlY3JldA==
+  user-agent: Faraday v2.7.4
   accept: application/json
+  authorization: Basic dGhlX3VzZXI6dGhlX3NlY3JldA==
+  accept-encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3
 method: GET
 body: ''
 fresh: false

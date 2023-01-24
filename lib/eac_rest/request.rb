@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'curb'
 require 'eac_rest/response'
 require 'eac_ruby_utils/core_ext'
+require 'faraday'
 
 module EacRest
   class Request
@@ -25,10 +25,29 @@ module EacRest
       auth(::Struct.new(:username, :password).new(username, password))
     end
 
-    def build_curl
-      r = ::Curl::Easy.new(url)
-      MODIFIERS.each { |suffix| send("build_curl_#{suffix}", r) }
-      r
+    # @return [Faraday::Connection]
+    def faraday_connection
+      ::Faraday.default_connection_options[:headers] = {}
+      ::Faraday::Connection.new(faraday_connection_options) do |conn|
+        conn.request :url_encoded
+        auth.if_present { |v| conn.request :authorization, :basic, v.username, v.password }
+      end
+    end
+
+    # @return [Hash]
+    def faraday_connection_options
+      {
+        request: { params_encoder: Faraday::FlatParamsEncoder }, ssl: { verify: ssl_verify? }
+      }
+    end
+
+    # @return [Faraday::Response]
+    def faraday_response
+      conn = faraday_connection
+      conn.send(sanitized_verb, url) do |req|
+        req.headers = conn.headers.merge(headers)
+        sanitized_body_data.if_present { |v| req.body = v }
+      end
     end
 
     def immutable_constructor_args
@@ -46,38 +65,15 @@ module EacRest
 
     private
 
-    def build_curl_auth(curl)
-      auth.if_present do |a|
-        curl.http_auth_types = :basic
-        curl.username = a.username
-        curl.password = a.password
-      end
-    end
-
-    def build_curl_body_data(curl)
-      sanitized_body_data.if_present { |v| curl.post_body = v }
-    end
-
-    def build_curl_headers(curl)
-      curl.headers.merge!(headers)
-    end
-
-    def build_curl_ssl_verify(curl)
-      return if ssl_verify?.nil?
-
-      curl.ssl_verify_host = ssl_verify?
-      curl.ssl_verify_peer = ssl_verify?
-    end
-
-    def build_curl_verb(curl)
-      curl.set(:customrequest, sanitized_verb.to_s.upcase)
-    end
-
     def sanitized_body_data
       body_data.if_present do |v|
-        v = v.map { |k, vv| [k, vv] } if v.is_a?(::Hash)
-        v = URI.encode_www_form(v) if v.is_a?(::Array)
-        v.to_s
+        next v unless v.is_a?(::Enumerable)
+        next v if v.is_a?(::Hash)
+
+        v.each_with_object({}) do |e, a|
+          a[e[0]] ||= []
+          a[e[0]] << e[1]
+        end
       end
     end
   end

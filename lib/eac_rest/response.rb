@@ -37,7 +37,10 @@ module EacRest
       body_data
     end
 
-    delegate :body_str, to: :performed
+    # @return [String]
+    def body_str
+      performed.body
+    end
 
     def body_str_or_raise
       raise_unless_200
@@ -100,13 +103,9 @@ module EacRest
     end
 
     def performed
-      @performed ||= begin
-        r = request.build_curl
-        r.perform || raise("CURL perform failed for #{url}")
-        r
-                     rescue ::Curl::Err::CurlError
-                       raise ::EacRest::Error
-      end
+      @performed_curl ||= request.faraday_response
+    rescue ::Faraday::Error
+      raise ::EacRest::Error
     end
   end
 end

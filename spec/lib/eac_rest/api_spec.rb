@@ -47,7 +47,7 @@ require 'eac_rest/api'
       let(:request) { request_base }
 
       it do
-        expect { response_body }.to(raise_error(::Curl::Err::SSLPeerCertificateError))
+        expect { response_body }.to(raise_error(::EacRest::Error))
       end
     end
 

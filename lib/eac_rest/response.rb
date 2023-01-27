@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'active_support/core_ext/hash/conversions'
+require 'eac_rest'
 require 'eac_ruby_utils/core_ext'
 require 'json'
 
@@ -101,6 +102,8 @@ module EacRest
       @perform ||= begin
         curl.perform || raise("CURL perform failed for #{url}")
         true
+                   rescue ::Curl::Err::CurlError
+                     raise ::EacRest::Error
       end
     end
 

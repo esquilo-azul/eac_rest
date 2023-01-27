@@ -6,7 +6,7 @@ require 'eac_ruby_utils/core_ext'
 
 module EacRest
   class Request
-    BOOLEAN_MODIFIERS = %w[ssl_verify ssl_verify_peer ssl_verify_host].freeze
+    BOOLEAN_MODIFIERS = %w[ssl_verify ssl_verify_peer].freeze
     COMMON_MODIFIERS = %w[auth body_data verb].freeze
     HASH_MODIFIERS = %w[header].freeze
     MODIFIERS = COMMON_MODIFIERS + BOOLEAN_MODIFIERS + HASH_MODIFIERS.map(&:pluralize)
@@ -68,12 +68,6 @@ module EacRest
       return if ssl_verify_peer?.nil?
 
       curl.ssl_verify_peer = ssl_verify_peer?
-    end
-
-    def build_curl_ssl_verify_host(curl)
-      return if ssl_verify_host?.nil?
-
-      curl.ssl_verify_peer = ssl_verify_host?
     end
 
     def build_curl_verb(curl)

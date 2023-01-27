@@ -65,16 +65,14 @@ module EacRest
 
     private
 
-    def sanitized_body_data
-      body_data.if_present do |v|
-        next v unless v.is_a?(::Enumerable)
-        next v if v.is_a?(::Hash)
-
-        v.each_with_object({}) do |e, a|
-          a[e[0]] ||= []
-          a[e[0]] << e[1]
-        end
-      end
+    def body_fields
+      @body_fields ||= ::EacRest::Request::BodyFields.new(body_data)
     end
+
+    def sanitized_body_data
+      body_fields.to_h || body_data
+    end
+
+    require_sub __FILE__
   end
 end

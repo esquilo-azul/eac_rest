@@ -50,7 +50,7 @@ module EacRest
     end
 
     def build_curl_body_data(curl)
-      www_form_body_data_encoded.if_present { |v| curl.post_body = v }
+      sanitized_body_data.if_present { |v| curl.post_body = v }
     end
 
     def build_curl_headers(curl)
@@ -71,7 +71,7 @@ module EacRest
       )
     end
 
-    def www_form_body_data_encoded
+    def sanitized_body_data
       body_data.if_present do |v|
         v = v.map { |k, vv| [k, vv] } if v.is_a?(::Hash)
         v = URI.encode_www_form(v) if v.is_a?(::Array)

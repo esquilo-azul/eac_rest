@@ -3,7 +3,6 @@
 require 'curb'
 require 'eac_rest/response'
 require 'eac_ruby_utils/core_ext'
-require 'ostruct'
 
 module EacRest
   class Request
@@ -23,7 +22,7 @@ module EacRest
     common_constructor :url, :body_data_proc, default: [nil]
 
     def autenticate(username, password)
-      auth(::OpenStruct.new(username: username, password: password))
+      auth(::Struct.new(:username, :password).new(username, password))
     end
 
     def immutable_constructor_args

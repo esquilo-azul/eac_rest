@@ -27,6 +27,11 @@ module EacRest
           end
         end
       end
+
+      # @return [Boolean]
+      def with_file?
+        fields.if_present(false) { |v| v.any?(&:with_file?) }
+      end
     end
   end
 end

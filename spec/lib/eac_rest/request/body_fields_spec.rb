@@ -26,5 +26,22 @@ require 'eac_rest/request/body_fields'
         end
       end
     end
+
+    context 'when source_body has a file' do
+      let(:file) do
+        temp = ::EacRubyUtils::Fs::Temp.file
+        temp.write('TEMPORARY')
+        ::File.new(temp.to_path)
+      end
+      let(:source_body) { { file1: file } }
+      let(:instance) { described_class.new(source_body) }
+      let(:expected_file) { ::Faraday::Multipart::FilePart.new(file.path, 'text/plain') }
+
+      %w[class original_filename local_path content_type].each do |attr|
+        it do
+          expect(instance.to_h.fetch('file1').first.send(attr)).to eq(expected_file.send(attr))
+        end
+      end
+    end
   end
 end

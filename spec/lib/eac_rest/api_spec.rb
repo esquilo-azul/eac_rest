@@ -10,6 +10,13 @@ require 'eac_rest/api'
     http_server.on_container(&example)
   end
 
+  before do
+    allow_any_instance_of(::Faraday::Multipart::Middleware).to( # rubocop:disable RSpec/AnyInstance
+      receive(:unique_boundary)
+      .and_return('-----------RubyMultipartPost-0123456789abcdef0123456789abcdef')
+    )
+  end
+
   include_examples 'source_target_fixtures', __FILE__
 
   def source_data(source_file)

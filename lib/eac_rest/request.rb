@@ -3,6 +3,7 @@
 require 'eac_rest/response'
 require 'eac_ruby_utils/core_ext'
 require 'faraday'
+require 'faraday/multipart'
 
 module EacRest
   class Request
@@ -29,7 +30,7 @@ module EacRest
     def faraday_connection
       ::Faraday.default_connection_options[:headers] = {}
       ::Faraday::Connection.new(faraday_connection_options) do |conn|
-        conn.request :url_encoded
+        conn.request(body_with_file? ? :multipart : :url_encoded)
         auth.if_present { |v| conn.request :authorization, :basic, v.username, v.password }
       end
     end
@@ -67,6 +68,11 @@ module EacRest
 
     def body_fields
       @body_fields ||= ::EacRest::Request::BodyFields.new(body_data)
+    end
+
+    # @return [Boolean]
+    def body_with_file?
+      body_fields.with_file?
     end
 
     def sanitized_body_data

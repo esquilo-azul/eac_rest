@@ -2,6 +2,7 @@
 
 require 'eac_rest/request/body_field_value'
 require 'eac_ruby_utils/core_ext'
+require 'faraday/multipart/file_part'
 
 module EacRest
   class Request
@@ -37,6 +38,11 @@ module EacRest
       # @return [Array]
       def hash_value
         values.map(&:to_faraday)
+      end
+
+      # @return [Boolean]
+      def with_file?
+        values.any?(&:file?)
       end
     end
   end

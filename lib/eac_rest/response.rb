@@ -23,7 +23,7 @@ module EacRest
     delegate :body_data_proc, to: :request
 
     def body_data
-      r = performed_curl.headers['Accept'].if_present(body_str) do |v|
+      r = performed.headers['Accept'].if_present(body_str) do |v|
         method_name = "body_data_from_#{v.parameterize.underscore}"
         respond_to?(method_name) ? send(method_name) : body_str
       end
@@ -37,7 +37,7 @@ module EacRest
       body_data
     end
 
-    delegate :body_str, to: :performed_curl
+    delegate :body_str, to: :performed
 
     def body_str_or_raise
       raise_unless_200
@@ -50,7 +50,7 @@ module EacRest
     end
 
     def headers
-      performed_curl.header_str.each_line.map(&:strip)[1..-1].reject(&:blank?)
+      performed.header_str.each_line.map(&:strip)[1..-1].reject(&:blank?)
         .map { |header_line| HEADER_LINE_PARSER.parse!(header_line) }
         .to_h
     end
@@ -72,7 +72,7 @@ module EacRest
     end
 
     def status
-      performed_curl.status.to_i
+      performed.status.to_i
     end
 
     delegate :url, to: :curl
@@ -99,13 +99,13 @@ module EacRest
       nil
     end
 
-    def performed_curl
-      @performed_curl ||= begin
+    def performed
+      @performed ||= begin
         r = request.build_curl
         r.perform || raise("CURL perform failed for #{url}")
         r
-                          rescue ::Curl::Err::CurlError
-                            raise ::EacRest::Error
+                     rescue ::Curl::Err::CurlError
+                       raise ::EacRest::Error
       end
     end
   end

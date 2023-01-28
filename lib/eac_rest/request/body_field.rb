@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'eac_rest/request/body_field_value'
 require 'eac_ruby_utils/core_ext'
 
 module EacRest
@@ -25,6 +26,7 @@ module EacRest
       common_constructor :key, :values do
         self.key = key.to_s
         self.values = (values.is_a?(::Array) ? values.to_a : [values])
+                        .map { |v| ::EacRest::Request::BodyFieldValue.new(v) }
       end
 
       # @return [String]
@@ -34,7 +36,7 @@ module EacRest
 
       # @return [Array]
       def hash_value
-        values
+        values.map(&:to_faraday)
       end
     end
   end

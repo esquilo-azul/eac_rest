@@ -7,7 +7,7 @@ require 'eac_rest/request/body_fields'
     [
       [
         { field1: 'value1', field2: %w[value2 value3] },
-        { field1: 'value1', field2: %w[value2 value3] }
+        { 'field1' => ['value1'], 'field2' => %w[value2 value3] }
       ], [
         'field1=value1&field2=value2',
         nil

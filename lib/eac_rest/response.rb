@@ -78,7 +78,7 @@ module EacRest
       performed.status.to_i
     end
 
-    delegate :url, to: :curl
+    delegate :url, to: :request
 
     def to_s
       "URL: #{url}\nStatus: #{status}\nBody:\n\n#{body_str}"

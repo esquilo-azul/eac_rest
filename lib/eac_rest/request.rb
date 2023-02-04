@@ -30,7 +30,11 @@ module EacRest
     def faraday_connection
       ::Faraday.default_connection_options[:headers] = {}
       ::Faraday::Connection.new(faraday_connection_options) do |conn|
-        conn.request(body_with_file? ? :multipart : :url_encoded)
+        if body_with_file?
+          conn.request :multipart, flat_encode: true
+        else
+          conn.request :url_encoded
+        end
         auth.if_present { |v| conn.request :authorization, :basic, v.username, v.password }
       end
     end

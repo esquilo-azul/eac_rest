@@ -103,7 +103,7 @@ module EacRest
     end
 
     def performed
-      @performed_curl ||= request.faraday_response
+      @performed ||= request.faraday_response
     rescue ::Faraday::Error
       raise ::EacRest::Error
     end

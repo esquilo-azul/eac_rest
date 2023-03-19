@@ -1,88 +1,46 @@
 # frozen_string_literal: true
 
+require 'eac_envs/http/request'
 require 'eac_rest/response'
 require 'eac_ruby_utils/core_ext'
-require 'faraday'
-require 'faraday/multipart'
 
 module EacRest
   class Request
-    BOOLEAN_MODIFIERS = %w[ssl_verify].freeze
-    COMMON_MODIFIERS = %w[auth body_data verb].freeze
-    HASH_MODIFIERS = %w[header].freeze
-    MODIFIERS = COMMON_MODIFIERS + BOOLEAN_MODIFIERS + HASH_MODIFIERS.map(&:pluralize)
+    attr_reader :internal_request
 
-    enable_immutable
-    immutable_accessor(*BOOLEAN_MODIFIERS, type: :boolean)
-    immutable_accessor(*COMMON_MODIFIERS, type: :common)
-    immutable_accessor(*HASH_MODIFIERS, type: :hash)
-
-    enable_listable
-    lists.add_symbol :verb, :get, :delete, :options, :post, :put
-
-    common_constructor :url, :body_data_proc, default: [nil]
-
-    def autenticate(username, password)
-      auth(::Struct.new(:username, :password).new(username, password))
+    # @param url [EacEnvs::Http::Request, String]
+    # @param response_body_data_proc [Proc, nil]
+    def initialize(url, response_body_data_proc = nil)
+      if url.is_a?(::EacEnvs::Http::Request)
+        @internal_request = url
+      else
+        @internal_request = ::EacEnvs::Http::Request.new.url(url)
+        response_body_data_proc.if_present { |v| @internal_request.response_body_data_proc = v }
+      end
     end
 
-    # @return [Faraday::Connection]
-    def faraday_connection
-      ::Faraday.default_connection_options[:headers] = {}
-      ::Faraday::Connection.new(faraday_connection_options) do |conn|
-        if body_with_file?
-          conn.request :multipart, flat_encode: true
+    delegate :sanitized_verb, to: :internal_request
+
+    {
+      auth: 0, body_data: 0, header: 1, headers: 0, ssl_verify: 0, verb: 0
+    }.each do |method_name, read_args_count|
+      define_method method_name do |*args|
+        if args.count <= read_args_count
+          internal_request.send(method_name, *args)
         else
-          conn.request :url_encoded
+          self.class.new(internal_request.send(method_name, *args))
         end
-        auth.if_present { |v| conn.request :authorization, :basic, v.username, v.password }
       end
     end
 
-    # @return [Hash]
-    def faraday_connection_options
-      {
-        request: { params_encoder: Faraday::FlatParamsEncoder }, ssl: { verify: ssl_verify? }
-      }
+    # @return [EacRest::Request]
+    def autenticate(username, password)
+      self.class.new(internal_request.basic_auth(username, password))
     end
 
-    # @return [Faraday::Response]
-    def faraday_response
-      conn = faraday_connection
-      conn.send(sanitized_verb, url) do |req|
-        req.headers = conn.headers.merge(headers)
-        sanitized_body_data.if_present { |v| req.body = v }
-      end
-    end
-
-    def immutable_constructor_args
-      [url, body_data_proc]
-    end
-
+    # @return [EacRest::Response]
     def response
       ::EacRest::Response.new(self)
     end
-
-    # @return [Symbol]
-    def sanitized_verb
-      verb.if_present(VERB_GET) { |v| self.class.lists.verb.value_validate!(v) }
-    end
-
-    private
-
-    def body_fields
-      @body_fields ||= ::EacRest::Request::BodyFields.new(body_data)
-    end
-
-    # @return [Boolean]
-    def body_with_file?
-      body_fields.with_file?
-    end
-
-    def sanitized_body_data
-      body_fields.to_h || body_data
-    end
-
-    require_sub __FILE__
   end
 end

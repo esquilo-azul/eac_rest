@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'active_support/core_ext/hash/conversions'
-require 'eac_rest'
+require 'eac_rest/error'
 require 'eac_ruby_utils/core_ext'
 require 'json'
 

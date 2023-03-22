@@ -15,7 +15,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'eac_envs-http', '~> 0.2'
   s.add_dependency 'eac_fs', '~> 0.16'
   s.add_dependency 'eac_ruby_utils', '~> 0.112'
-  s.add_dependency 'faraday-multipart', '~> 1.0', '>= 1.0.4'
 
   s.add_development_dependency 'aranha-parsers', '~> 0.15'
   s.add_development_dependency 'eac_docker', '~> 0.5'

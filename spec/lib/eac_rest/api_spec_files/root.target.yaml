@@ -1,16 +1,9 @@
 ---
-path: "/"
+ssl: false
+method: GET
+uri: "/"
+body:
 headers:
   user-agent: Faraday v2.7.4
   accept-encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3
   accept: "*/*"
-method: GET
-body: ''
-fresh: false
-ips: []
-protocol: http
-query: {}
-subdomains: []
-xhr: false
-os: {}
-connection: {}

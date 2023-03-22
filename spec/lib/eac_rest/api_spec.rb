@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 require 'eac_rest/api'
+require 'eac_envs/http/rspec/echo_server'
 
 ::RSpec.describe ::EacRest::Api do
-  let(:instance) { described_class.new(http_server.http_root_url) }
-  let(:http_server) { ::HttpEchoServer.new }
+  let(:instance) { described_class.new(http_server.root_url) }
+  let(:http_server) { ::EacEnvs::Http::Rspec::EchoServer.http }
 
   around do |example|
-    http_server.on_container(&example)
+    http_server.on_active(&example)
   end
 
   before do
@@ -46,7 +47,8 @@ require 'eac_rest/api'
   end
 
   context 'with self signed https server' do
-    let(:instance) { described_class.new(http_server.https_root_url) }
+    let(:http_server) { ::EacEnvs::Http::Rspec::EchoServer.https }
+    let(:instance) { described_class.new(http_server.root_url) }
     let(:request_base) { instance.request('/any/path') }
     let(:response_body) { request.response.body_str }
 

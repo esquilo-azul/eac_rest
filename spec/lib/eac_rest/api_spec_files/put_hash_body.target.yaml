@@ -1,18 +1,11 @@
 ---
-path: "/path/to/service"
+ssl: false
+method: PUT
+uri: "/path/to/service"
+body: field1=value1&field2=value2
 headers:
   user-agent: Faraday v2.7.4
   content-type: application/x-www-form-urlencoded
   accept-encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3
   accept: "*/*"
   content-length: '27'
-method: PUT
-body: field1=value1&field2=value2
-fresh: false
-ips: []
-protocol: http
-query: {}
-subdomains: []
-xhr: false
-os: {}
-connection: {}

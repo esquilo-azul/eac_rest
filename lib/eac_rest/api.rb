@@ -13,6 +13,13 @@ module EacRest
       self.ssl_verify = true
     end
 
+    # @param entity_class [Class]
+    # @param url_suffix [String]
+    # @return [EacRest::Entity]
+    def entity(entity_class, url_suffix)
+      entity_class.new(self, request_json(url_suffix))
+    end
+
     def request(service_url_suffix, headers = {}, &body_data_proc)
       r = ::EacRest::Request.new(build_service_url(service_url_suffix),
                                  body_data_proc).ssl_verify(ssl_verify)

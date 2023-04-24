@@ -21,7 +21,7 @@ module EacRest
       end
     end
 
-    delegate :sanitized_verb, to: :internal_request
+    delegate :sanitized_verb, :url, to: :internal_request
 
     {
       auth: 0, body_data: 0, header: 1, headers: 0, ssl_verify: 0, verb: 0

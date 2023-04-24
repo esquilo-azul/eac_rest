@@ -15,7 +15,9 @@ module EacRest
         @internal_request = url
       else
         @internal_request = ::EacEnvs::Http::Request.new.url(url)
-        response_body_data_proc.if_present { |v| @internal_request.response_body_data_proc = v }
+        response_body_data_proc.if_present do |v|
+          @internal_request = @internal_request.response_body_data_proc(v)
+        end
       end
     end
 

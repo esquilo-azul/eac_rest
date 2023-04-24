@@ -4,7 +4,7 @@ require 'eac_ruby_utils/core_ext'
 
 module EacRest
   class Entity
-    enable_abstract
+    enable_abstract_methods
     enable_simple_cache
     common_constructor :api, :data_or_id
 

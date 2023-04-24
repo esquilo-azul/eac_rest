@@ -9,5 +9,5 @@ headers:
   user-agent: Faraday v2.7.4
   content-type: multipart/form-data; boundary=-----------RubyMultipartPost-0123456789abcdef0123456789abcdef
   content-length: '290'
-  accept-encoding: gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  accept-encoding: gzip,deflate
   accept: "*/*"

@@ -7,7 +7,7 @@ module EacRest
     enable_abstract_methods
     enable_simple_cache
     enable_listable
-    lists.add_symbol :option
+    lists.add_symbol :option, :parent
     common_constructor :api, :data_or_id, :options, default: [{}] do
       self.options = ::EacRest::Entity.lists.option.hash_keys_validate!(options)
     end
@@ -45,6 +45,11 @@ module EacRest
     # @return [Object]
     def id_from_data
       raise_abstract_method __method__
+    end
+
+    # @return [EacRest::Entity, nil]
+    def parent_entity
+      options[OPTION_PARENT]
     end
 
     private

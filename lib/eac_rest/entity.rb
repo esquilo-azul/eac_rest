@@ -16,8 +16,11 @@ module EacRest
 
     # @return [Hash]
     def data
-      self.data_or_id = data_from_id unless data_or_id_data?
-      data_or_id
+      if internal_data.blank?
+        self.internal_data = data_or_id_data? ? data_or_id : data_from_id
+      end
+
+      internal_data
     end
 
     # @return [Boolean]
@@ -29,5 +32,9 @@ module EacRest
     def data_from_id
       raise_abstract_method __method__
     end
+
+    private
+
+    attr_accessor :internal_data
   end
 end

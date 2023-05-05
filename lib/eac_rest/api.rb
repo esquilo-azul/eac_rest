@@ -18,8 +18,8 @@ module EacRest
     # @param entity_class [Class]
     # @param url_suffix [String]
     # @return [EacRest::Entity]
-    def entity(entity_class, url_suffix, options = {})
-      entity_class.new(self, request_json(url_suffix), options)
+    def entity(entity_class, data_or_id, options = {})
+      entity_class.new(self, data_or_id, options)
     end
 
     def request(service_url_suffix, headers = {}, &body_data_proc)

@@ -7,6 +7,8 @@ module EacRest
   # Abstract methods
   #   * self.issue_get_url_suffix(provider_issue_id)
   class Api
+    DEFAULT_ROOT_ENTITY_CLASS_NAME_SUFFIX = 'Root'
+
     require_sub __FILE__, include_modules: true
     attr_accessor :ssl_verify
     common_constructor :root_url, :username, :password, default: [nil, nil] do
@@ -52,6 +54,16 @@ module EacRest
     # @return [Addressable::URI]
     def build_service_url_suffix(suffix)
       ::Addressable::URI.parse(suffix)
+    end
+
+    # @return [EacRest::Entity]
+    def root_entity
+      @root_entity ||= root_entity_class.new(self, nil)
+    end
+
+    # @return [Class]
+    def root_entity_class
+      self.class.const_get(DEFAULT_ROOT_ENTITY_CLASS_NAME_SUFFIX)
     end
   end
 end

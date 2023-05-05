@@ -33,6 +33,16 @@ module EacRest
       raise_abstract_method __method__
     end
 
+    # @return [Object]
+    def id
+      data_or_id_data? ? id_from_data : data_or_id
+    end
+
+    # @return [Object]
+    def id_from_data
+      raise_abstract_method __method__
+    end
+
     private
 
     attr_accessor :internal_data

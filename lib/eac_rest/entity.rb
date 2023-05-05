@@ -6,7 +6,11 @@ module EacRest
   class Entity
     enable_abstract_methods
     enable_simple_cache
-    common_constructor :api, :data_or_id
+    enable_listable
+    lists.add_symbol :option
+    common_constructor :api, :data_or_id, :options, default: [{}] do
+      self.options = ::EacRest::Entity.lists.option.hash_keys_validate!(options)
+    end
 
     class << self
       def from_array_data(api, array_data, *args)

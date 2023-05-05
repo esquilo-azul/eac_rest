@@ -25,7 +25,7 @@ module EacRest
 
     # @return [Boolean]
     def data_or_id_data?
-      data_or_id.is?(::Hash)
+      data_or_id.is_a?(::Hash)
     end
 
     # @return [Hash]

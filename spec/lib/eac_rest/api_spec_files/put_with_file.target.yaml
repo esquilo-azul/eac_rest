@@ -6,7 +6,7 @@ body: "-------------RubyMultipartPost-0123456789abcdef0123456789abcdef\r\nConten
   form-data; name=\"field1\"; filename=\"basename\"\r\nContent-Length: 6\r\nContent-Type:
   text/plain\r\nContent-Transfer-Encoding: binary\r\n\r\nvalue1\r\n-------------RubyMultipartPost-0123456789abcdef0123456789abcdef--\r\n"
 headers:
-  user-agent: Faraday v2.7.4
+  user-agent: EacRest
   content-type: multipart/form-data; boundary=-----------RubyMultipartPost-0123456789abcdef0123456789abcdef
   content-length: '290'
   accept-encoding: gzip,deflate

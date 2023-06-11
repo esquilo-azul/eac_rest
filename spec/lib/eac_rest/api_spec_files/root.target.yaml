@@ -4,6 +4,6 @@ method: GET
 uri: "/"
 body:
 headers:
-  user-agent: Faraday v2.7.4
+  user-agent: EacRest
   accept-encoding: gzip,deflate
   accept: "*/*"

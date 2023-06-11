@@ -17,10 +17,11 @@ class RequestBuilder
     self.data = data.with_indifferent_access
   end
 
-  def result
+  def result # rubocop:disable Metrics/AbcSize
     r = %i[verb headers].inject(selected_api.request(data.fetch(:url_suffix))) do |a, e|
       data[e].if_present(a) { |v| a.send(e, v) }
     end
+    r = r.header('user-agent', 'EacRest')
     data[:body_data].if_present(r) { |v| r.body_data(build_body_data(v)) }
   end
 

@@ -4,6 +4,6 @@ method: GET
 uri: "/path/to/service?field1=value1&field2=value2"
 body:
 headers:
-  user-agent: Faraday v2.7.4
+  user-agent: EacRest
   accept: application/json
   accept-encoding: gzip,deflate

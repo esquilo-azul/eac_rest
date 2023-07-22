@@ -19,6 +19,8 @@ module EacRest
         internal_response.send(method_name, *args, &block)
       rescue ::EacEnvs::Http::Error
         raise ::EacRest::Error
+      rescue ::EacEnvs::Http::Response
+        raise self
       end
     end
   end

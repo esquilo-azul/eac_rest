@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'eac_rest/helper'
 require 'eac_rest/request'
 require 'eac_ruby_utils/core_ext'
 
@@ -40,20 +41,7 @@ module EacRest
 
     # @return [Addressable::URI]
     def build_service_url(suffix)
-      r = ::Addressable::URI.parse(suffix)
-      return r if r.scheme.present?
-
-      s = build_service_url_suffix(suffix)
-      r = ::Addressable::URI.parse(root_url)
-      r.path += s.path
-      r.query_values = r.query_values(::Array).if_present([]) +
-                       s.query_values(::Array).if_present([])
-      r
-    end
-
-    # @return [Addressable::URI]
-    def build_service_url_suffix(suffix)
-      ::Addressable::URI.parse(suffix)
+      ::EacRest::Helper.url_join(root_url, suffix)
     end
 
     # @return [EacRest::Entity]

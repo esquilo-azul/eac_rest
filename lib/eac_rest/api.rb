@@ -9,6 +9,7 @@ module EacRest
   #   * self.issue_get_url_suffix(provider_issue_id)
   class Api
     DEFAULT_ROOT_ENTITY_CLASS_NAME_SUFFIX = 'Root'
+    JSON_REQUEST_HEADERS = { 'Accept' => 'application/json' }.freeze
 
     require_sub __FILE__, include_modules: true
     attr_accessor :ssl_verify
@@ -33,7 +34,7 @@ module EacRest
     end
 
     def request_json(service_url_suffix, headers = {}, &body_data_proc)
-      request(service_url_suffix, headers.merge('Accept' => 'application/json')) do |body_data|
+      request(service_url_suffix, headers.merge(JSON_REQUEST_HEADERS)) do |body_data|
         r = body_data.is_a?(::Enumerable) ? body_data : ::JSON.parse(body_data)
         r = body_data_proc.call(r) if body_data_proc
         r

@@ -12,6 +12,7 @@ module EacRest
 
     require_sub __FILE__, include_modules: true
     attr_accessor :ssl_verify
+
     common_constructor :root_url, :username, :password, default: [nil, nil] do
       self.ssl_verify = true
     end

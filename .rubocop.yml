@@ -1,9 +1,6 @@
 ---
 inherit_gem:
   eac_ruby_gem_support: ".rubocop.yml"
-Naming/VariableNumber:
-  Exclude:
-  - lib/eac_rest/response.rb
 Style/RedundantConstantBase:
   Exclude:
   - Gemfile

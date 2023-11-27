@@ -1,9 +1,6 @@
 ---
 inherit_gem:
   eac_ruby_gem_support: ".rubocop.yml"
-Gemspec/RequiredRubyVersion:
-  Exclude:
-  - eac_rest.gemspec
 Layout/EmptyLinesAroundAttributeAccessor:
   Exclude:
   - lib/eac_rest/api.rb

@@ -17,7 +17,7 @@ class RequestBuilder
     self.data = data.with_indifferent_access
   end
 
-  def result # rubocop:disable Metrics/AbcSize
+  def result
     r = %i[verb headers].inject(selected_api.request(data.fetch(:url_suffix))) do |a, e|
       data[e].if_present(a) { |v| a.send(e, v) }
     end

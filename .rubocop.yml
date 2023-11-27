@@ -1,9 +1,6 @@
 ---
 inherit_gem:
   eac_ruby_gem_support: ".rubocop.yml"
-Lint/RedundantCopDisableDirective:
-  Exclude:
-  - spec/spec_helper/request_builder.rb
 Naming/VariableNumber:
   Exclude:
   - lib/eac_rest/response.rb

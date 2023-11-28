@@ -6,6 +6,7 @@ require 'eac_ruby_utils/core_ext'
 
 module EacRest
   class Request
+    BODY_DATA_JSON_HEADERS = { 'Content-Type' => 'application/json' }.freeze
     attr_reader :internal_request
 
     # @param url [EacEnvs::Http::Request, String]
@@ -38,6 +39,12 @@ module EacRest
     # @return [EacRest::Request]
     def autenticate(username, password)
       self.class.new(internal_request.basic_auth(username, password))
+    end
+
+    # @param object [Object]
+    # @param self
+    def body_data_json(object)
+      body_data(object.to_json).headers(headers.merge(BODY_DATA_JSON_HEADERS))
     end
 
     # @return [EacRest::Response]

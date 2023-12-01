@@ -13,7 +13,7 @@ module EacRest
       @internal_response ||= request.internal_request.response
     end
 
-    %i[body_data body_data_or_raise body_str body_str_or_raise header headers
+    %i[body_data body_data! body_data_or_raise body_str body_str_or_raise header headers
        link links raise_unless_200 status to_s url].each do |method_name| # rubocop:disable Naming/VariableNumber
       define_method method_name do |*args, &block|
         internal_response.send(method_name, *args, &block)

@@ -11,8 +11,11 @@ module EacRest
         parent_entity.if_present('', &:entity_root_url_suffix).to_uri
       end
 
+      # @param url_suffix [Addressable::URI]
       # @return [EacRest::Request]
-      delegate :request, to: :api
+      def request(url_suffix)
+        api.request_json(request_url(url_suffix))
+      end
 
       # @param url_suffix [Addressable::URI]
       # @return [Addressable::URI]

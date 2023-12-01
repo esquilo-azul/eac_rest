@@ -12,8 +12,12 @@ module EacRest
       end
 
       # @return [EacRest::Request]
-      def request(url_suffix)
-        api.request(::EacRest::Helper.url_join(entity_root_url_suffix, url_suffix))
+      delegate :request, to: :api
+
+      # @param url_suffix [Addressable::URI]
+      # @return [Addressable::URI]
+      def request_url(url_suffix)
+        ::EacRest::Helper.url_join(entity_root_url_suffix, url_suffix)
       end
     end
   end

@@ -3,11 +3,6 @@
 module EacRest
   class Entity
     module Fetching
-      # @return [Addressable::URI]
-      def entity_root_url_suffix
-        parent_entity.if_present('', &:entity_root_url_suffix).to_uri
-      end
-
       # @param url_suffix [Addressable::URI]
       # @return [EacRest::Request]
       def request(url_suffix)
@@ -17,13 +12,19 @@ module EacRest
       # @param url_suffix [Addressable::URI]
       # @return [EacRest::Request]
       def request_json(url_suffix)
-        api.request_json(request_url(url_suffix))
+        api.request_json(to_api_address_suffix(url_suffix))
       end
 
-      # @param url_suffix [Addressable::URI]
-      # @return [Addressable::URI]
-      def request_url(url_suffix)
-        ::EacRest::Helper.url_join(entity_root_url_suffix, url_suffix)
+      # @return [String]
+      def to_api_address_suffix(url_suffix = '')
+        r = [to_api_address_suffix_self, url_suffix].join
+        r = parent_entity.to_api_address_suffix(r) if parent_entity
+        r
+      end
+
+      # @return [String]
+      def to_api_address_suffix_self
+        raise_abstract_method __method__
       end
     end
   end

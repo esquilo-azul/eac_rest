@@ -16,13 +16,6 @@ module EacRest
       end
     end
 
-    # @param entity_class [Class]
-    # @param url_suffix [String]
-    # @return [EacRest::Entity]
-    def child_entity(entity_class, data_or_id, options = {})
-      api.entity(entity_class, data_or_id, options.merge(OPTION_PARENT => self))
-    end
-
     # @return [EacRest::Entity, nil]
     def parent_entity
       options[OPTION_PARENT]

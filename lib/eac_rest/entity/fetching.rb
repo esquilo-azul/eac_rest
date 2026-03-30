@@ -11,6 +11,12 @@ module EacRest
       # @param url_suffix [Addressable::URI]
       # @return [EacRest::Request]
       def request(url_suffix)
+        request_json(url_suffix)
+      end
+
+      # @param url_suffix [Addressable::URI]
+      # @return [EacRest::Request]
+      def request_json(url_suffix)
         api.request_json(request_url(url_suffix))
       end
 

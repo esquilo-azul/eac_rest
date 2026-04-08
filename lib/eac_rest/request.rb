@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require 'eac_envs/http/request'
-require 'eac_rest/response'
-require 'eac_ruby_utils/core_ext'
-
 module EacRest
   class Request
     BODY_DATA_JSON_HEADERS = { 'Content-Type' => 'application/json' }.freeze

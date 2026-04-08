@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require 'eac_rest/helper'
-require 'eac_rest/request'
-require 'eac_ruby_utils/core_ext'
-
 module EacRest
   # Abstract methods
   #   * self.issue_get_url_suffix(provider_issue_id)

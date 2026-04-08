@@ -1,9 +1,5 @@
 # frozen_string_literal: true
 
-require 'eac_rest/error'
-require 'eac_envs/http/error'
-require 'eac_ruby_utils/core_ext'
-
 module EacRest
   class Response < ::StandardError
     common_constructor :request

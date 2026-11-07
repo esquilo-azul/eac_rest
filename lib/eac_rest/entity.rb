@@ -11,8 +11,8 @@ module EacRest
     end
 
     class << self
-      def from_array_data(api, array_data, *args)
-        array_data.map { |item_data| new(api, item_data, *args) }
+      def from_array_data(api, array_data, *)
+        array_data.map { |item_data| new(api, item_data, *) }
       end
     end
 

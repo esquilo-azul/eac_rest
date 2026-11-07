@@ -13,9 +13,9 @@ Gem::Specification.new do |s|
   s.files = Dir['{lib}/**/*']
   s.required_ruby_version = '>= 2.7' # rubocop:disable Gemspec/RequiredRubyVersion
 
-  s.add_dependency 'eac_envs-http', '~> 0.7', '>= 0.7.1'
-  s.add_dependency 'eac_fs', '~> 0.20', '>= 0.20.1'
-  s.add_dependency 'eac_ruby_utils', '~> 0.130'
+  s.add_dependency 'eac_envs-http', '~> 0.7', '>= 0.7.2'
+  s.add_dependency 'eac_fs', '~> 0.20', '>= 0.20.3'
+  s.add_dependency 'eac_ruby_utils', '~> 0.136'
 
-  s.add_development_dependency 'eac_ruby_gem_support', '~> 0.12', '>= 0.12.2'
+  s.add_development_dependency 'eac_ruby_gem_support', '~> 0.15'
 end

@@ -21,7 +21,7 @@ module EacRest
     delegate :sanitized_verb, :url, to: :internal_request
 
     {
-      auth: 0, body_data: 0, header: 1, headers: 0, ssl_verify: 0, verb: 0
+      auth: 0, body_data: 0, header: 1, headers: 0, ssl_verify: 0, timeout: 0, verb: 0
     }.each do |method_name, read_args_count|
       define_method method_name do |*args|
         if args.count <= read_args_count
